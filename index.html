@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="pt-BR" autocomplete="off">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Sua Selfie Perfeita – Quiz</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231a1a2e'/%3E%3Crect x='10' y='6' width='12' height='20' rx='2.5' fill='none' stroke='%23F5C518' stroke-width='1.5'/%3E%3Crect x='11.5' y='8.5' width='9' height='13' rx='1' fill='%23F5C518' opacity='0.15'/%3E%3Ccircle cx='16' cy='7.8' r='0.9' fill='%23F5C518'/%3E%3Ccircle cx='8' cy='9' r='0.7' fill='%23F5C518' opacity='0.7'/%3E%3Ccircle cx='24' cy='12' r='0.5' fill='%23F5C518' opacity='0.5'/%3E%3Ccircle cx='7' cy='16' r='0.4' fill='%23F5C518' opacity='0.4'/%3E%3Ccircle cx='25' cy='20' r='0.6' fill='%23F5C518' opacity='0.6'/%3E%3C/svg%3E">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-73N0E6BSLY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-73N0E6BSLY');
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── RESET ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: #1a1a2e;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ─── TOKENS ─── */
+    :root {
+      --yellow:    #F5C518;
+      --yellow-hv: #E0B200;
+      --dark:      #1a1a2e;
+      --body:      #333;
+      --soft:      #666;
+      --bg-gray:   #f7f7f9;
+      --line:      #e8e8ec;
+      --green:     #2ecc71;
+      --red:       #e74c3c;
+      --radius:    12px;
+      --radius-lg: 20px;
+      --pill:      50px;
+      --max-w:     580px;
+    }
+
+    /* ─── PROGRESS BAR (fixed top – hidden) ─── */
+    #prog-wrap { display: none !important; }
+
+    /* ─── INLINE QUESTION PROGRESS ─── */
+    .q-prog-wrap {
+      width: 100%; max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 4px 20px 44px;
+    }
+    .q-prog-track {
+      height: 8px;
+      background: var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .q-prog-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--yellow), var(--yellow-hv));
+      border-radius: 8px;
+      transition: width .5s ease;
+    }
+
+    /* ─── SCREEN SYSTEM ─── */
+    .screen { display: none; min-height: 100dvh; flex-direction: column; }
+    .screen.active { display: flex; animation: fadeUp .35s ease both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══════════════════════════════════════
+       LANDING
+    ═══════════════════════════════════════ */
+    #screen-landing {
+      background: #fff;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px;
+    }
+
+    .land-inner { max-width: 480px; }
+
+    .land-tag {
+      display: inline-block;
+      font-size: 11px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--soft);
+      margin-bottom: 20px;
+    }
+
+    .land-emoji {
+      font-size: 52px; display: block;
+      margin-bottom: 20px;
+      animation: breathe 3s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.06); }
+    }
+
+    .land-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 8vw, 48px);
+      font-weight: 800; color: var(--dark);
+      line-height: 1.18; margin-bottom: 14px;
+    }
+    .land-title em { font-style: italic; color: var(--yellow-hv); }
+
+    .land-sub {
+      font-size: clamp(14px, 3.8vw, 16px);
+      color: var(--soft);
+      margin-bottom: 36px;
+    }
+
+    .land-chips {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: center; margin-bottom: 44px;
+    }
+    .chip {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--bg-gray);
+      border: 1px solid var(--line);
+      border-radius: var(--pill);
+      padding: 7px 14px;
+      font-size: 12px; font-weight: 500; color: var(--body);
+    }
+
+    /* ─── BUTTONS ─── */
+    .btn-yellow {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--yellow);
+      color: var(--dark);
+      font-size: clamp(14px, 3.8vw, 16px); font-weight: 700;
+      padding: 16px 40px; border-radius: var(--pill);
+      box-shadow: 0 4px 20px rgba(245,197,24,.4);
+      transition: background .25s, transform .25s, box-shadow .25s;
+      width: 100%; max-width: 380px;
+      letter-spacing: .2px;
+    }
+    .btn-yellow:hover  { background: var(--yellow-hv); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,197,24,.45); }
+    .btn-yellow:active { transform: translateY(0); }
+
+    .btn-cta {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--yellow);
+      color: var(--dark);
+      font-size: clamp(14px, 4vw, 16px); font-weight: 700;
+      padding: 18px 40px; border-radius: var(--pill);
+      box-shadow: 0 4px 20px rgba(245,197,24,.4);
+      transition: background .25s, transform .25s, box-shadow .25s;
+      width: 100%; max-width: 460px;
+      text-align: center; line-height: 1.3; letter-spacing: .2px;
+    }
+    .btn-cta:hover  { background: var(--yellow-hv); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,197,24,.45); }
+    .btn-cta:active { transform: translateY(0); }
+
+    /* ═══════════════════════════════════════
+       QUESTION SCREENS
+    ═══════════════════════════════════════ */
+    .q-screen {
+      background: #fff;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .q-top {
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 64px 24px 0;
+      text-align: center;
+    }
+
+    .q-pip {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--yellow); opacity: .7;
+      margin: 0 auto 24px;
+    }
+
+    .q-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(19px, 5.2vw, 26px);
+      font-weight: 700; color: var(--dark);
+      line-height: 1.4; margin-bottom: 32px;
+    }
+
+    .answers {
+      width: 100%; max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 20px 52px;
+      display: flex; flex-direction: column; gap: 11px;
+    }
+
+    .ans-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px;
+      border: 2px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, transform .2s;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      user-select: none;
+      text-align: left;
+    }
+    .ans-card:hover {
+      border-color: var(--yellow);
+      background: #fffde7;
+      transform: translateX(4px);
+    }
+    .ans-card.selected {
+      border-color: var(--yellow);
+      background: #fffde7;
+      transform: translateX(4px);
+    }
+    .ans-card.disabled {
+      pointer-events: none;
+      opacity: 1;
+      border-color: var(--line);
+      background: #fff;
+      transform: none;
+    }
+    .ans-card.selected.disabled {
+      border-color: var(--yellow);
+      background: #fffde7;
+      transform: translateX(4px);
+    }
+    @media (hover: none) {
+      .ans-card:hover {
+        border-color: var(--line);
+        background: #fff;
+        transform: none;
+      }
+    }
+
+    .ans-letter {
+      width: 36px; height: 36px; min-width: 36px;
+      border-radius: 50%;
+      background: var(--bg-gray);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--soft);
+      transition: background .2s, color .2s;
+    }
+    .ans-card:hover .ans-letter,
+    .ans-card.selected .ans-letter {
+      background: var(--yellow);
+      color: var(--dark);
+    }
+
+    .ans-text {
+      font-size: clamp(13px, 3.5vw, 15px);
+      font-weight: 500; color: var(--body);
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════
+       LOADING SCREEN
+    ═══════════════════════════════════════ */
+    #screen-loading {
+      background: #fff;
+      align-items: center; justify-content: center;
+      text-align: center;
+    }
+    .load-inner { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+    .load-emoji { font-size: 44px; animation: breathe 1.5s ease-in-out infinite; }
+    .load-txt {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 600; color: var(--dark);
+    }
+    .load-sub { font-size: 13px; color: var(--soft); }
+    .load-bar-wrap {
+      width: 220px; height: 5px;
+      background: var(--line); border-radius: 5px; overflow: hidden;
+    }
+    .load-bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, var(--yellow), var(--yellow-hv));
+      animation: loadBar 2.1s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    @keyframes loadBar { from { width: 0 } to { width: 100% } }
+
+    /* ═══════════════════════════════════════
+       RESULT PAGE
+    ═══════════════════════════════════════ */
+    #screen-result { display: none; flex-direction: column; }
+    #screen-result.show { display: flex; }
+
+    .rs { padding: 64px 24px; }
+    .rs.white { background: #fff; }
+    .rs.gray  { background: var(--bg-gray); }
+
+    .rs-inner { max-width: 640px; margin: 0 auto; width: 100%; }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.on { opacity: 1; transform: none; }
+
+    /* ── Section labels & titles ── */
+    .s-tag {
+      font-size: 11px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--soft);
+      display: block; margin-bottom: 8px;
+    }
+    .s-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 5.5vw, 34px);
+      font-weight: 800; color: var(--dark);
+      line-height: 1.28; margin-bottom: 12px;
+    }
+    .s-title em { font-style: italic; color: var(--yellow-hv); }
+    .s-body {
+      font-size: clamp(14px, 3.6vw, 16px);
+      color: var(--soft); line-height: 1.78;
+    }
+    .divider {
+      width: 40px; height: 3px;
+      background: var(--yellow);
+      border-radius: 3px; margin: 16px 0 28px;
+    }
+    .divider.center { margin-left: auto; margin-right: auto; }
+
+    /* ── SECTION 1 – hero ── */
+    .rs-hero {
+      background: var(--bg-gray);
+      padding: 72px 24px 64px;
+      text-align: center;
+    }
+    .rs-hero .s-title { font-size: clamp(26px, 6.5vw, 42px); }
+
+    .insight-card {
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-left: 4px solid var(--yellow);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      max-width: 520px; margin: 28px auto 0;
+      text-align: left;
+    }
+    .insight-card .s-tag { margin-bottom: 8px; }
+    .insight-card p {
+      font-size: clamp(13px, 3.5vw, 15px);
+      color: var(--body); line-height: 1.75;
+    }
+    .insight-card strong { color: var(--dark); font-weight: 700; }
+
+    /* ── SECTION 2 – benefits ── */
+    .ben-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 13px;
+      margin-bottom: 32px;
+    }
+    .ben-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: clamp(14px, 3.7vw, 16px);
+      font-weight: 500; color: var(--body);
+    }
+    .ben-list .ico { font-size: 18px; min-width: 22px; }
+
+    .flex-center { display: flex; justify-content: center; }
+
+    /* ── SECTION 3 – product ── */
+    .product-block { text-align: center; }
+    .product-block .divider { margin: 16px auto 24px; }
+    .product-block .s-body { max-width: 440px; margin: 0 auto; }
+
+    /* ── SECTION 4 – before/after ── */
+    .ba-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 14px; margin-top: 28px;
+    }
+    @media(max-width:480px) { .ba-grid { grid-template-columns: 1fr; } }
+
+    .ba-card { border-radius: var(--radius); padding: 22px 18px; }
+    .ba-card.b4 { background: #fef2f2; border: 1.5px solid #fca5a5; }
+    .ba-card.af { background: #f0fdf4; border: 1.5px solid #86efac; }
+
+    .ba-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 12px; display: block;
+    }
+    .ba-card.b4 .ba-label { color: var(--red); }
+    .ba-card.af .ba-label { color: var(--green); }
+
+    .ba-row {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: clamp(12px, 3.2vw, 13px);
+      color: var(--body); line-height: 1.5; margin-bottom: 9px;
+    }
+    .ba-row:last-child { margin-bottom: 0; }
+    .ba-row .dot { min-width: 14px; margin-top: 3px; font-size: 11px; }
+
+    .ba-images {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .ba-images img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1.5px solid rgba(0,0,0,.06);
+      background: #fff;
+      box-shadow: 0 6px 16px rgba(0,0,0,.05);
+    }
+
+
+    /* ── SECTION 5 – urgency + offer ── */
+    .urgency-row {
+      display: flex; align-items: center; gap: 10px;
+      flex-wrap: wrap; margin-bottom: 24px;
+    }
+    .urgency-label { color: var(--red); font-weight: 700; font-size: clamp(13px,3.5vw,15px); }
+    #countdown {
+      background: var(--red); color: #fff;
+      font-weight: 700; font-size: clamp(14px,4vw,17px);
+      padding: 5px 12px; border-radius: 8px;
+      letter-spacing: 1px; font-variant-numeric: tabular-nums;
+    }
+
+    .offer-card {
+      background: var(--dark);
+      border-radius: var(--radius-lg);
+      padding: 40px 28px 36px;
+      text-align: center;
+    }
+    .offer-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(16px,4.5vw,22px);
+      font-weight: 700; color: #fff;
+      margin-bottom: 20px; line-height: 1.35;
+    }
+    .price-was { font-size: 14px; color: rgba(255,255,255,.35); text-decoration: line-through; margin-bottom: 4px; }
+    .price-now {
+      font-size: clamp(48px,12vw,68px);
+      font-weight: 800; color: var(--yellow);
+      line-height: 1; letter-spacing: -1px; margin-bottom: 6px;
+    }
+    .price-now sup { font-size: .38em; vertical-align: top; margin-top: .4em; font-weight: 700; }
+    .price-now sub { font-size: .3em; font-weight: 600; }
+    .price-note { font-size: 12px; color: rgba(255,255,255,.3); margin-bottom: 28px; }
+
+    /* ── SECTION 6 – what you get ── */
+    .box-outline {
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius);
+      padding: 26px 22px;
+    }
+    .check-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .check-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: clamp(13px,3.6vw,15px);
+      font-weight: 500; color: var(--body);
+    }
+    .ck { color: var(--green); font-weight: 700; min-width: 18px; }
+
+
+    /* ── SEÇÃO 6 – DESAFIO 10 DIAS ── */
+    .days-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media(min-width:520px) {
+      .days-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .day-card {
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color .2s, box-shadow .2s;
+      cursor: pointer;
+    }
+    .day-card:hover {
+      border-color: var(--yellow);
+      box-shadow: 0 6px 18px rgba(0,0,0,.05);
+    }
+    .day-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 16px 16px 18px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .day-badge {
+      background: var(--yellow);
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: var(--pill);
+      letter-spacing: .5px;
+      min-width: 58px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .day-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--body);
+      text-align: left;
+      flex: 1;
+    }
+    .day-arrow {
+      font-size: 13px;
+      color: var(--soft);
+      transition: transform .3s ease;
+      flex-shrink: 0;
+    }
+    .day-card.open .day-arrow {
+      transform: rotate(180deg);
+    }
+    .day-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .35s ease, padding .35s ease;
+      padding: 0 18px;
+    }
+    .day-card.open .day-body {
+      max-height: 200px;
+      padding: 0 18px 16px;
+    }
+    .day-body-inner {
+      font-size: clamp(13px, 3.4vw, 14px);
+      color: var(--soft);
+      line-height: 1.65;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    /* ── SECTION 7 – modules ── */
+    .mod-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+
+    .mod-card {
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-left: 4px solid var(--yellow);
+      border-radius: var(--radius);
+      padding: 20px 18px 20px 22px;
+    }
+    .mod-title {
+      font-size: clamp(14px,3.8vw,16px);
+      font-weight: 700; color: var(--dark);
+      margin-bottom: 11px;
+    }
+    .mod-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 7px;
+    }
+    .mod-list li {
+      display: flex; align-items: flex-start; gap: 9px;
+      font-size: clamp(12px,3.2vw,13px); color: var(--soft);
+    }
+
+    .wa-card {
+      background: linear-gradient(135deg,#1DAA61,#128C7E);
+      border-radius: var(--radius); padding: 24px 20px;
+      margin-top: 12px; color: #fff;
+    }
+    .wa-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .wa-card p  { font-size: 13px; opacity: .9; margin-bottom: 12px; line-height: 1.6; }
+    .wa-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .wa-list li { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; }
+
+    /* ── SECTION 7 – bonus number ── */
+    .mod-bonus-num {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--yellow-hv); margin-bottom: 4px;
+    }
+
+    /* ── SECTION 9 – guarantee ── */
+    .gtee-wrap {
+      border: 2px solid var(--yellow);
+      border-radius: var(--radius-lg);
+      padding: 40px 28px;
+      text-align: center;
+    }
+    .gtee-wrap-p {
+      font-size: clamp(14px,3.8vw,16px);
+      color: var(--body); line-height: 1.75;
+    }
+    .gtee-wrap strong { color: var(--dark); font-weight: 700; }
+
+    /* ── SECTION 10 – creator ── */
+    .creator-wrap {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 28px; text-align: center;
+    }
+    @media(min-width:560px) {
+      .creator-wrap { flex-direction: row; align-items: flex-start; text-align: left; }
+    }
+    .creator-img {
+      width: 148px; height: 148px; min-width: 148px;
+      border-radius: 50%; object-fit: cover;
+      border: 3px solid var(--yellow);
+      box-shadow: 0 6px 28px rgba(245,197,24,.25);
+    }
+    .creator-fallback {
+      width: 148px; height: 148px; min-width: 148px;
+      border-radius: 50%;
+      background: var(--bg-gray);
+      display: none; align-items: center; justify-content: center;
+      font-size: 48px; border: 3px solid var(--yellow);
+    }
+    .creator-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px,5vw,28px);
+      font-weight: 800; color: var(--dark); margin-bottom: 6px;
+    }
+    .creator-badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--dark);
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 4px 12px; border-radius: var(--pill);
+      margin-bottom: 14px;
+    }
+    .creator-info p { font-size: clamp(13px,3.5vw,15px); color: var(--soft); line-height: 1.78; }
+    .creator-info strong { color: var(--dark); }
+    .mark-brush {
+      display: inline;
+      padding: 0 .18em;
+      border-radius: 6px;
+      background: linear-gradient(transparent 35%, rgba(245,197,24,.75) 35%, rgba(245,197,24,.75) 88%, transparent 88%);
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+
+    /* ── SECTION 11 – vision ── */
+    .vision-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 14px;
+      margin: 24px 0 32px;
+    }
+    .vision-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: clamp(14px,3.8vw,16px);
+      font-weight: 500; color: var(--body);
+    }
+    .vision-list .vi { font-size: 17px; min-width: 22px; color: var(--green); }
+
+    .decision {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(17px,4.8vw,22px);
+      font-weight: 700; color: var(--dark);
+      line-height: 1.45; max-width: 400px; margin: 0 auto;
+    }
+    .decision em { font-style: italic; color: var(--yellow-hv); }
+
+    /* ── SECTION 12 – final CTA ── */
+    .final-dark {
+      background: var(--dark);
+      border-radius: var(--radius-lg);
+      padding: 52px 28px;
+      text-align: center;
+    }
+    .final-dark h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px,6vw,36px);
+      font-weight: 800; color: #fff;
+      margin-bottom: 10px;
+    }
+    .final-dark p { font-size: clamp(13px,3.6vw,15px); color: rgba(255,255,255,.45); margin-bottom: 32px; }
+    .final-note { font-size: 11px !important; margin-top: 16px !important; margin-bottom: 0 !important; }
+
+    /* ─── FOOTER ─── */
+    .site-footer { background: var(--dark); padding: 22px; text-align: center; }
+    .site-footer p { font-size: 11px; color: rgba(255,255,255,.2); }
+
+    /* ─── UTILS ─── */
+    .text-center { text-align: center; }
+    .mt-2 { margin-top: 8px; }
+    .mt-4 { margin-top: 16px; }
+    .mt-6 { margin-top: 24px; }
+    .mt-8 { margin-top: 32px; }
+
+    @media(min-width:768px) {
+      .rs { padding: 80px 32px; }
+      .offer-card { padding: 52px 48px 44px; }
+      .gtee-wrap  { padding: 52px 48px; }
+      .final-dark { padding: 64px 52px; }
+    }
+    .sliders-row {
+      display: flex; gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cmp-slider {
+      position: relative;
+      width: 100%; max-width: 200px;
+      aspect-ratio: 3/4;
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: ew-resize;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,.10);
+      flex: 1 1 140px;
+    }
+    .cmp-slider img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      display: block;
+      border-radius: 0;
+    }
+    .cmp-slider .img-after  { z-index: 1; }
+    .cmp-slider .img-before { z-index: 2; }
+    .cmp-clip {
+      position: absolute; inset: 0; z-index: 2;
+      overflow: hidden;
+    }
+    .cmp-clip img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .cmp-line {
+      position: absolute; top: 0; bottom: 0;
+      width: 2px; background: #fff;
+      z-index: 3;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .cmp-handle {
+      position: absolute; top: 50%;
+      width: 40px; height: 40px;
+      background: #fff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,.25);
+      pointer-events: none;
+    }
+    .cmp-handle svg { width: 18px; height: 18px; }
+    .cmp-label-before,
+    .cmp-label-after {
+      position: absolute; bottom: 10px;
+      z-index: 5;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 4px;
+      pointer-events: none;
+    }
+    .cmp-label-before {
+      left: 8px;
+      background: rgba(231,76,60,.85); color: #fff;
+    }
+    .cmp-label-after {
+      right: 8px;
+      background: rgba(46,204,113,.85); color: #fff;
+    }
+
+    /* ── SEÇÃO DIAGNÓSTICO – barra única ── */
+    .diag-card {
+      background: var(--bg-gray);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 36px 28px 32px;
+      margin-top: 24px;
+      text-align: center;
+    }
+    .diag-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px,5vw,24px);
+      font-weight: 800; color: var(--dark);
+      line-height: 1.3; margin-bottom: 6px;
+    }
+    .diag-headline em { font-style: italic; color: var(--yellow-hv); }
+    .diag-sub {
+      font-size: clamp(13px,3.5vw,14px);
+      color: var(--soft); margin-bottom: 36px;
+      line-height: 1.6; max-width: 380px; margin-left: auto; margin-right: auto;
+    }
+    .progress-wrap {
+      position: relative;
+      padding: 0 8px;
+      margin-bottom: 52px;
+    }
+    .progress-track {
+      height: 14px;
+      background: var(--line);
+      border-radius: 10px;
+      overflow: visible;
+      position: relative;
+    }
+    .progress-fill-avg {
+      position: absolute; top: 0; left: 0;
+      height: 100%; border-radius: 10px;
+      background: #d0d0d8;
+      width: 0; transition: width 1s ease .2s;
+    }
+    .progress-fill-you {
+      position: absolute; top: 0; left: 0;
+      height: 100%; border-radius: 10px;
+      background: var(--yellow);
+      width: 0; transition: width 1.1s cubic-bezier(.4,0,.2,1) .3s;
+    }
+    .progress-fill-after {
+      position: absolute; top: 0; left: 0;
+      height: 100%; border-radius: 10px;
+      background: linear-gradient(90deg, var(--yellow) 40%, #2ecc71);
+      width: 0; opacity: 0;
+      transition: width 1.4s cubic-bezier(.4,0,.2,1) .5s, opacity .4s ease .5s;
+      border: 2px dashed #2ecc71;
+    }
+    .marker {
+      position: absolute; top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex; flex-direction: column; align-items: center;
+      pointer-events: none;
+    }
+    .marker-dot {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+      flex-shrink: 0;
+    }
+    .marker-label {
+      position: absolute; top: 28px;
+      white-space: nowrap;
+      font-size: 11px; font-weight: 700;
+      color: var(--soft); text-align: center;
+      letter-spacing: .3px;
+    }
+    .marker-value {
+      position: absolute; bottom: 28px;
+      white-space: nowrap;
+      font-size: 12px; font-weight: 700;
+    }
+    .marker.avg .marker-dot   { background: #b0b0b8; }
+    .marker.you .marker-dot   { background: var(--yellow); }
+    .marker.after .marker-dot { background: #2ecc71; }
+    .marker.avg   .marker-label { color: #999; }
+    .marker.you   .marker-label { color: var(--dark); }
+    .marker.after .marker-label { color: #27ae60; }
+    .marker.avg   .marker-value { color: #999; }
+    .marker.you   .marker-value { color: var(--dark); }
+    .marker.after .marker-value { color: #27ae60; }
+    .diag-insight {
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-left: 4px solid var(--yellow);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      font-size: clamp(13px,3.5vw,14px);
+      color: var(--body); line-height: 1.7;
+      text-align: left;
+    }
+    .diag-insight strong { color: var(--dark); }
+  </style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div id="prog-wrap"><div id="prog-bar"></div></div>
+
+<!-- ══════════════════════════════
+     LANDING
+══════════════════════════════ -->
+<div class="screen active" id="screen-landing">
+  <div class="land-inner">
+    <span class="land-tag">Quiz gratuito</span>
+    <span class="land-emoji">🤳</span>
+    <h1 class="land-title">Sua selfie perfeita<br><em>começa aqui.</em></h1>
+    <p class="land-sub">Leva apenas 2 minutos pra responder</p>
+    <div class="flex-center" style="margin-top:12px;">
+      <button class="btn-yellow" onclick="startQuiz()">Começar agora →</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUESTION SCREENS (injected by JS) -->
+<div id="q-mount"></div>
+
+<!-- ══════════════════════════════
+     LOADING
+══════════════════════════════ -->
+<div class="screen" id="screen-loading">
+  <div class="load-inner">
+    <span class="load-emoji">✨</span>
+    <p class="load-txt">Analisando suas respostas…</p>
+    <p class="load-sub">Um momento, estamos preparando seu resultado</p>
+    <div class="load-bar-wrap">
+      <div class="load-bar-inner" id="load-bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     RESULT
+══════════════════════════════ -->
+<div id="screen-result">
+
+  <!-- 1 – Parabéns -->
+  <section class="rs-hero reveal">
+    <div class="rs-inner text-center">
+      <span class="s-tag">✨ Resultado do Quiz</span>
+      <h1 class="s-title" style="font-family:'Playfair Display',serif;font-size:clamp(26px,6.5vw,42px);font-weight:800;color:var(--dark);line-height:1.22;">
+        Parabéns! Você está a poucos passos de <em>ter selfies perfeitas</em>
+      </h1>
+      <p class="s-body" style="max-width:500px;margin:14px auto 0;">
+        Descubra como tirar sua selfie perfeita em apenas 10 dias, mesmo que você ache que não é fotogênica(o).
+      </p>
+      <div class="insight-card">
+        <span class="s-tag">📍 Uma percepção importante</span>
+        <p>Se você chegou até aqui, provavelmente já entendeu que:<br>
+        <strong>O problema das suas selfies não é você.</strong><br><br>
+        Você apenas não conhece os segredos de uma boa selfie ainda.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1.5 – Diagnóstico Personalizado -->
+  <section class="rs gray reveal" id="section-diag">
+    <div class="rs-inner">
+      <span class="s-tag" style="display:block;text-align:center;">📊 Seu resultado</span>
+      <h2 class="s-title text-center">Veja onde você está <em>e onde pode chegar</em></h2>
+      <div class="divider center"></div>
+      <div class="diag-card">
+        <p class="diag-headline" id="diag-headline">…</p>
+        <p class="diag-sub" id="diag-sub"></p>
+
+        <div class="progress-wrap">
+          <div class="progress-track" id="prog-track">
+            <div class="progress-fill-avg" id="pfill-avg"></div>
+            <div class="progress-fill-you" id="pfill-you"></div>
+            <div class="progress-fill-after" id="pfill-after"></div>
+          </div>
+          <!-- marcadores injetados por JS -->
+        </div>
+
+        <div class="diag-insight" id="diag-insight"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 – Benefícios + CTA -->
+  <section class="rs white reveal">
+    <div class="rs-inner text-center">
+      <span class="s-tag">Transformação possível</span>
+      <h2 class="s-title">Com o método certo, você pode <em>aprender a tirar selfies incríveis</em></h2>
+      <div class="divider center"></div>
+      <ul class="ben-list" style="max-width:480px;margin-left:auto;margin-right:auto;margin-bottom:32px;text-align:left;">
+        <li><span class="ico">✨</span>Valorizar o próprio rosto nas fotos</li>
+        <li><span class="ico">✨</span>Usar o ângulo certo para destacar seus melhores traços</li>
+        <li><span class="ico">✨</span>Aproveitar a luz para deixar a selfie mais bonita(o)</li>
+        <li><span class="ico">✨</span>Postar fotos com mais confiança nas redes sociais</li>
+      </ul>
+      <div class="flex-center">
+        <a href="https://pay.hotmart.com/U105215956M?bid=1775338349868" class="btn-cta">
+          Quero entrar no desafio ✨
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 – Sobre o produto -->
+  <section class="rs gray reveal">
+    <div class="rs-inner product-block">
+      <span class="s-tag">E é exatamente isso que você vai aprender no:</span>
+      <h2 class="s-title" style="font-size:clamp(28px,7vw,44px);">
+        Sua Selfie Perfeita<br><em>em 10 Dias</em>
+      </h2>
+      <div class="divider center"></div>
+      <p class="s-body">
+        Um desafio simples. 10 dias. 10 aulas curtas. Tudo pelo celular que você já tem.
+      </p>
+    </div>
+  </section>
+
+  <!-- 4 – Antes e Depois -->
+  <section class="rs white reveal">
+    <div class="rs-inner">
+      <span class="s-tag text-center" style="display:block;text-align:center;">Transformação real</span>
+      <h2 class="s-title text-center">Arraste e veja <em>a diferença</em></h2>
+      <div class="divider center"></div>
+      <p class="s-body text-center" style="max-width:420px;margin:0 auto 32px;">
+        Deslize para a esquerda ou direita para comparar o antes e depois de cada selfie.
+      </p>
+
+      <div class="sliders-row">
+        <div class="cmp-slider" data-before="antes1.webp" data-after="depois1.webp"></div>
+        <div class="cmp-slider" data-before="antes2.webp" data-after="depois2.webp"></div>
+        <div class="cmp-slider" data-before="antes3.webp" data-after="depois3.webp"></div>
+      </div>
+
+      <p class="s-body text-center" style="font-size:12px;margin-top:20px;opacity:.5;">
+        ← arraste para ver o antes &nbsp;|&nbsp; arraste para ver o depois →
+      </p>
+    </div>
+  </section>
+
+  <!-- 5 – Oferta + Cronômetro -->
+  <section class="rs gray reveal">
+    <div class="rs-inner">
+      <div class="urgency-row" style="justify-content:center;">
+        <span class="urgency-label">⚠️ Oferta válida nos próximos 5 minutos</span>
+        <span id="countdown">05:00</span>
+      </div>
+      <div class="offer-card">
+        <p class="offer-name">Comece agora o desafio<br>Sua Selfie Perfeita em 10 Dias</p>
+        <p style="font-size:13px;color:rgba(255,255,255,.45);margin-bottom:6px;">ANTES você pagaria</p>
+        <p class="price-was" style="font-size:18px;">R$ 147,00</p>
+        <p style="font-size:14px;color:rgba(255,255,255,.55);margin:14px 0 6px;">Mas se você entrar agora, sairá por apenas</p>
+        <div class="price-now"><sup>R$</sup>67<sub>,00</sub></div>
+        <p class="price-note">Acesso imediato</p>
+        <div class="flex-center">
+          <a href="https://pay.hotmart.com/U105215956M?bid=1775338349868" class="btn-cta" style="max-width:100%;">
+            QUERO ENTRAR POR R$67 ✨
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 – O que você vai receber -->
+  <section class="rs white reveal">
+    <div class="rs-inner text-center">
+      <span class="s-tag">Conteúdo Completo</span>
+      <h2 class="s-title">O que você vai receber</h2>
+      <p class="s-body" style="margin-bottom:28px;">Um desafio com <strong style="color:var(--dark);">10 aulas práticas</strong>, liberadas uma por dia, pra que a cada dia você aprenda um novo ajuste simples que torna suas selfies perfeitas:</p>
+
+      <div class="days-grid">
+
+        <div class="day-card" onclick="toggleDay(this)">
+          <div class="day-card-header">
+            <div class="day-badge">Dia 1</div>
+            <div class="day-title">Quebrando o gelo com a câmera</div>
+            <span class="day-arrow">▾</span>
+          </div>
+          <div class="day-body">
+            <div class="day-body-inner">Perca a vergonha e comece a se acostumar com a câmera</div>
+          </div>
+        </div>
+
+        <div class="day-card" onclick="toggleDay(this)">
+          <div class="day-card-header">
+            <div class="day-badge">Dia 2</div>
+            <div class="day-title">Descobrindo seu melhor ângulo</div>
+            <span class="day-arrow">▾</span>
+          </div>
+          <div class="day-body">
+            <div class="day-body-inner">Um passo a passo para encontrar o ângulo que mais valoriza o seu rosto</div>
+          </div>
+        </div>
+
+        <div class="day-card" onclick="toggleDay(this)">
+          <div class="day-card-header">
+            <div class="day-badge">Dia 3</div>
+            <div class="day-title">Descobrindo a luz da beleza</div>
+            <span class="day-arrow">▾</span>
+          </div>
+          <div class="day-body">
+            <div class="day-body-inner">Aprenda como usar a luz ao seu favor e descubra qual a sua favorita</div>
+          </div>
+        </div>
+
+        <div class="day-card" onclick="toggleDay(this)">
+          <div class="day-card-header">
+            <div class="day-badge">Dia 4</div>
+            <div class="day-title">A expressão natural</div>
+            <span class="day-arrow">▾</span>
+          </div>
+          <div class="day-body">
+            <div class="day-body-inner">Aprenda a se expressar na frente da câmera. Selfie sem sorrir também é permitido</div>
+          </div>
+        </div>
+
+        <div class="day-card" onclick="toggleDay(this)">
+          <div class="day-card-header">
+            <div class="day-badge">Dia 5</div>
+            <div class="day-title">A postura que valoriza</div>
+            <span class="day-arrow">▾</span>
+          </div>
+          <div class="day-body">
+            <div class="day-body-inner">Cuidados que você precisa ter com a sua postura + dicas de poses</div>
+          </div>
+        </div>
+
+        <div class="day-card" onclick="toggleDay(this)">
+          <div class="day-card-header">
+            <div class="day-badge">Dia 6</div>
+            <div class="day-title">Fundo e ambiente</div>
+            <span class="day-arrow">▾</span>
+          </div>
+          <div class="day-body">
+            <div class="day-body-inner">Aprenda a escolher o melhor fundo que te dá destaque na selfie</div>
+          </div>
+        </div>
+
+        <div class="day-card" onclick="toggleDay(this)">
+          <div class="day-card-header">
+            <div class="day-badge">Dia 7</div>
+            <div class="day-title">Mãos e enquadramento</div>
+            <span class="day-arrow">▾</span>
+          </div>
+          <div class="day-body">
+            <div class="day-body-inner">Aprenda o que fazer com as mãos na hora da foto</div>
+          </div>
+        </div>
+
+        <div class="day-card" onclick="toggleDay(this)">
+          <div class="day-card-header">
+            <div class="day-badge">Dia 8</div>
+            <div class="day-title">Selfie com profundidade</div>
+            <span class="day-arrow">▾</span>
+          </div>
+          <div class="day-body">
+            <div class="day-body-inner">Descubra técnicas de enquadramento e composição que dão profundidade às suas selfies</div>
+          </div>
+        </div>
+
+        <div class="day-card" onclick="toggleDay(this)">
+          <div class="day-card-header">
+            <div class="day-badge">Dia 9</div>
+            <div class="day-title">Edição inteligente</div>
+            <span class="day-arrow">▾</span>
+          </div>
+          <div class="day-body">
+            <div class="day-body-inner">Aprenda a fazer ajustes nas suas selfies que te deixarão ainda mais bonita(o)</div>
+          </div>
+        </div>
+
+        <div class="day-card" onclick="toggleDay(this)">
+          <div class="day-card-header">
+            <div class="day-badge">Dia 10</div>
+            <div class="day-title">A selfie perfeita</div>
+            <span class="day-arrow">▾</span>
+          </div>
+          <div class="day-body">
+            <div class="day-body-inner">Aplique tudo que foi aprendido e compartilhe o seu resultado</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 – O que está dentro -->
+  <section class="rs gray reveal">
+    <div class="rs-inner text-center">
+      <span class="s-tag">Incluso no desafio</span>
+      <h2 class="s-title">Além das aulas práticas você ainda vai ter:</h2>
+      <p class="s-body" style="max-width:520px;margin:0 auto 28px;">
+        Confira os bônus inclusos no desafio:
+      </p>
+      <div class="mod-grid" style="text-align:left;">
+
+        <div class="mod-card">
+          <p class="mod-bonus-num">Bônus 1</p>
+          <p class="mod-title">✅ Checklist da Selfie Perfeita</p>
+          <ul class="mod-list">
+            <li><span class="ck" style="font-size:12px;">✔</span>Garantir que todos os elementos da foto estejam corretos</li>
+            <li><span class="ck" style="font-size:12px;">✔</span>Melhorar qualquer selfie em poucos segundos</li>
+            <li><span class="ck" style="font-size:12px;">✔</span>Criar consistência nas fotos</li>
+          </ul>
+        </div>
+
+        <div class="mod-card">
+          <p class="mod-bonus-num">Bônus 2</p>
+          <p class="mod-title">🤳 Guia de Poses para Selfies</p>
+          <ul class="mod-list">
+            <li><span class="ck" style="font-size:12px;">✔</span>Saber como posicionar o rosto</li>
+            <li><span class="ck" style="font-size:12px;">✔</span>Aprender poses naturais</li>
+            <li><span class="ck" style="font-size:12px;">✔</span>Evitar poses travadas</li>
+          </ul>
+        </div>
+
+        <div class="mod-card">
+          <p class="mod-bonus-num">Bônus 3</p>
+          <p class="mod-title">✏️ Guia de Apps de Edição</p>
+          <ul class="mod-list">
+            <li><span class="ck" style="font-size:12px;">✔</span>Melhorar fotos em poucos cliques</li>
+            <li><span class="ck" style="font-size:12px;">✔</span>Ajustar brilho, contraste e cor</li>
+            <li><span class="ck" style="font-size:12px;">✔</span>Deixar a selfie mais profissional</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="wa-card" style="text-align:left;margin-top:12px;">
+        <p class="mod-bonus-num" style="color:rgba(255,255,255,.6);margin-bottom:6px;">Bônus 4</p>
+        <h4>💬 Suporte durante o desafio</h4>
+        <p>Você não estará sozinho. Ao entrar no desafio você terá acesso a um grupo exclusivo no WhatsApp, onde poderá:</p>
+        <ul class="wa-list">
+          <li>✔ Tirar dúvidas</li>
+          <li>✔ Compartilhar suas fotos</li>
+          <li>✔ Acompanhar a evolução de outros participantes</li>
+          <li>✔ Receber incentivo para completar os 10 dias</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 – Preço + CTA -->
+  <section class="rs white reveal">
+    <div class="rs-inner">
+      <div class="offer-card">
+        <span class="s-tag" style="color:rgba(255,255,255,.5);display:block;margin-bottom:6px;">Comece agora</span>
+        <p class="offer-name">Sua Selfie Perfeita em 10 Dias</p>
+        <p style="font-size:13px;color:rgba(255,255,255,.4);margin-bottom:4px;">De</p>
+        <p class="price-was" style="font-size:18px;">R$ 147,00</p>
+        <p style="font-size:14px;color:rgba(255,255,255,.55);margin:14px 0 4px;">Por apenas</p>
+        <div class="price-now"><sup>R$</sup>67<sub>,00</sub></div>
+        <p class="price-note">Acesso imediato · Pagamento único</p>
+        <div class="flex-center">
+          <a href="https://pay.hotmart.com/U105215956M?bid=1775338349868" class="btn-cta" style="max-width:100%;">
+            Quero começar o desafio 🚀
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 – Garantia -->
+  <section class="rs gray reveal">
+    <div class="rs-inner">
+      <div class="gtee-wrap">
+        <img loading="lazy" src="garantia7dias.webp" alt="Garantia de 7 dias" style="max-width:160px;width:100%;margin:0 auto 20px;display:block;" onerror="this.style.display='none';">
+        <p class="gtee-wrap-p">Você pode testar o desafio sem nenhum risco.</p>
+        <p class="gtee-wrap-p" style="margin-top:12px;">Se dentro de 7 dias você perceber que o desafio não é para você, basta solicitar o reembolso e <strong>100% do seu dinheiro será devolvido.</strong></p>
+        <p class="gtee-wrap-p" style="margin-top:12px;">A única coisa que você arrisca é 10 dias aprendendo a se ver mais bonita(o) nas fotos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 – Criador -->
+  <section class="rs white reveal">
+    <div class="rs-inner">
+      <span class="s-tag" style="text-align:center;display:block;margin-bottom:28px;">Quem criou este desafio</span>
+      <div class="creator-wrap">
+        <img loading="lazy"
+          src="fotoeduardo.webp"
+          alt="Eduardo Brito"
+          class="creator-img"
+          onerror="this.style.display='none'; document.getElementById('c-fallback').style.display='flex';"
+        >
+        <div id="c-fallback" class="creator-fallback">📸</div>
+        <div class="creator-info">
+          <h3>Eduardo Brito</h3>
+          <span class="creator-badge">📷 Fotógrafo Profissional · +10 anos</span>
+          <p>
+            Ao longo da carreira ele já fotografou casamentos, eventos, esportes, retratos em estúdio e fotografia gastronômica. Além disso, Eduardo é <span class="mark-brush"><strong>Embaixador da Adobe Internacional</strong></span>, uma das maiores empresas de fotografia e edição do mundo.<br><br>
+            Sua abordagem mistura técnica profissional com um olhar artístico, poético e acessível, tornando a fotografia algo simples, prazeroso e possível de aprender por qualquer pessoa.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 – Última chance -->
+  <section class="rs gray reveal">
+    <div class="rs-inner text-center">
+      <span class="s-tag">Última chance para começar</span>
+      <h2 class="s-title">Imagina você daqui há 10 dias:</h2>
+      <div class="divider center"></div>
+      <ul class="vision-list" style="max-width:440px;margin:0 auto 32px;text-align:left;">
+        <li><span class="vi">✔</span>Você olhando para suas fotos e gostando do que vê</li>
+        <li><span class="vi">✔</span>Postando selfies com mais confiança</li>
+        <li><span class="vi">✔</span>Recebendo mais elogios e curtidas</li>
+        <li><span class="vi">✔</span>Registrando momentos importantes com fotos incríveis</li>
+      </ul>
+      <p class="decision">Tudo isso começa com <em>uma decisão.</em></p>
+    </div>
+  </section>
+
+  <!-- 12 – Final CTA -->
+  <section class="rs white reveal">
+    <div class="rs-inner">
+      <div class="final-dark">
+        <h2>Entre agora no desafio</h2>
+        <p>Sua Selfie Perfeita em 10 Dias começa com um clique.</p>
+        <div class="flex-center">
+          <a href="https://pay.hotmart.com/U105215956M?bid=1775338349868" class="btn-cta" style="max-width:100%;font-size:clamp(15px,4.2vw,17px);">
+            QUERO MINHA SELFIE PERFEITA 📸
+          </a>
+        </div>
+        <p class="final-note" style="color:rgba(255,255,255,.25);">
+          Ao clicar você será redirecionada(o) para o checkout seguro da Hotmart.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>© 2025 Sua Selfie Perfeita · Todos os direitos reservados</p>
+  </footer>
+
+</div><!-- /screen-result -->
+
+<!-- ══════════════════════════════
+     JAVASCRIPT
+══════════════════════════════ -->
+<script>
+'use strict';
+
+const QUESTIONS = [
+  {
+    text: "Em qual situação você mais se reconhece hoje quando tenta tirar uma selfie?",
+    answers: [
+      "Evito selfies porque quase sempre fico estranha(o) nas fotos",
+      "Tiro selfies às vezes, mas quase nunca gosto do resultado",
+      "Tiro selfies com frequência, mas sinto que poderiam ficar muito melhores",
+      "Gosto de selfies e quero aprender a deixá-las realmente impressionantes"
+    ]
+  },
+  {
+    text: "Quão importante é para você melhorar suas fotos pessoais?",
+    answers: [
+      "Gostaria de ter selfies melhores do que as que tiro hoje",
+      "Acho importante ter selfies que me valorizam",
+      "Gostaria de ter selfies que chamam mais atenção",
+      "É muito importante! Gostaria de ter fotos que pareçam mais profissionais"
+    ]
+  },
+  {
+    text: "Quando você olha suas selfies depois de tirar a foto, o que mais costuma te incomodar?",
+    answers: [
+      "Meu rosto parece estranho ou diferente do espelho",
+      "A iluminação deixa meu rosto escuro ou com sombras ruins",
+      "Não sei qual ângulo usar e meu rosto fica desproporcional",
+      "Minha expressão fica travada ou artificial"
+    ]
+  },
+  {
+    text: "Quando você tenta tirar uma selfie sozinha(o), qual dificuldade aparece com mais frequência?",
+    answers: [
+      "Tiro várias fotos, mas não consigo encontrar o ângulo que valoriza o meu rosto",
+      "Testo diferentes posições e expressões, mas quase nenhuma fica natural",
+      "Nunca sei qual enquadramento funciona melhor",
+      "Preciso fazer muitas selfies pra quem sabe ter uma que eu gosto"
+    ]
+  },
+  {
+    text: "O que você acredita que mais dificulta tirar uma selfie realmente boa?",
+    answers: [
+      "Não sei qual ângulo usar",
+      "Não entendo como usar a luz",
+      "Não sei como posar naturalmente",
+      "Nunca aprendi um método simples"
+    ]
+  },
+  {
+    text: "O que normalmente acontece quando você não gosta da selfie que tirou?",
+    answers: [
+      "Apago a foto imediatamente",
+      "Guardo a foto, mas nunca posto",
+      "Tiro várias até achar uma aceitável",
+      "Evito tirar selfies no futuro"
+    ]
+  },
+  {
+    text: "Como você se sente quando compara suas selfies com as de outras pessoas?",
+    answers: [
+      "Sinto que minhas fotos nunca ficam tão bonitas",
+      "Percebo que falta alguma coisa, mas não sei o quê",
+      "Acho que outras pessoas parecem mais naturais nas fotos",
+      "Fico com vontade de aprender a fazer melhor"
+    ]
+  },
+  {
+    text: "Se você continuasse tirando selfies do mesmo jeito de hoje, o que provavelmente aconteceria?",
+    answers: [
+      "Eu continuaria evitando tirar fotos",
+      "Continuaria sem gostar do que vejo nas selfies",
+      "Perderia oportunidades de registrar momentos bonitos",
+      "Continuaria me sentindo insegura(o) ao postar"
+    ]
+  },
+  {
+    text: "Como sua autoestima pode ser impactada quando você nunca gosta das próprias selfies?",
+    answers: [
+      "Posso me sentir menos confiante",
+      "Posso evitar me expor nas redes sociais",
+      "Posso achar que o problema está em mim",
+      "Posso perder a vontade de me fotografar"
+    ]
+  },
+  {
+    text: "Se existisse um jeito simples de aprender ângulo, luz e expressão, isso faria diferença para você?",
+    answers: [
+      "Sim, porque eu teria mais segurança",
+      "Sim, porque finalmente entenderia o que fazer",
+      "Sim, porque conseguiria selfies mais bonitas",
+      "Sim, porque isso mudaria muito meu resultado"
+    ]
+  },
+  {
+    text: "O quanto você gostaria de se sentir mais bonita(o) e confiante nas suas selfies?",
+    answers: [
+      "Gostaria um pouco",
+      "Gostaria bastante",
+      "Gostaria muito",
+      "Quero muito isso para mim"
+    ]
+  },
+  {
+    text: "Você aceitaria seguir um passo a passo simples por 10 dias para transformar suas selfies?",
+    answers: [
+      "Sim, com certeza",
+      "Sim, se for prático",
+      "Sim, se eu conseguir aplicar com o celular que já tenho",
+      "Sim, quero começar o quanto antes"
+    ]
+  }
+];
+
+const LETTERS = ['A','B','C','D'];
+const TOTAL   = QUESTIONS.length;
+
+/* ─── RESPOSTAS DO USUÁRIO ─── */
+const userAnswers = new Array(TOTAL).fill(-1);
+
+/* ─── DIAGNÓSTICO – barra única ─── */
+function buildDiagnostic() {
+  var score = calcYouScore(userAnswers); // 0–100, representa nível atual
+  var avg   = 28;                        // média fixa do público
+  var after = Math.min(92, score + 48); // potencial após desafio
+
+  // Títulos e subtítulos baseados no score
+  var headline, sub, insight;
+  if (score < 25) {
+    headline = 'Você tem <em>muito espaço para crescer</em> — e isso é ótimo.';
+    sub = 'Quem começa do zero tem os maiores saltos de resultado. Em 10 dias você pode transformar completamente suas selfies.';
+    insight = '<strong>Sua maior virada está na técnica básica.</strong> Ângulo, luz e enquadramento — três coisas que ninguém te ensinou ainda. O desafio cobre tudo isso em aulas curtas e práticas.';
+  } else if (score < 45) {
+    headline = 'Você já tem alguma base — <em>falta só o método certo.</em>';
+    sub = 'Você tira fotos, percebe que algo não está certo, mas não sabe exatamente o quê. O desafio vai te dar exatamente isso.';
+    insight = '<strong>Você está presa(o) na tentativa e erro.</strong> Em vez de tirar dezenas de fotos esperando uma boa, você vai aprender a fazer cada selfie com intenção — e gostar do resultado.';
+  } else {
+    headline = 'Você já tem sensibilidade — <em>só precisa refinar.</em>';
+    sub = 'Você sente quando uma selfie funciona. O desafio vai transformar esse instinto em técnica consistente.';
+    insight = '<strong>Seu próximo nível é consistência.</strong> Parar de depender da sorte e passar a saber exatamente o que fazer em qualquer luz, qualquer ângulo, qualquer dia.';
+  }
+
+  document.getElementById('diag-headline').innerHTML = headline;
+  document.getElementById('diag-sub').textContent    = sub;
+  document.getElementById('diag-insight').innerHTML  = insight;
+
+  // Injeta marcadores no track
+  var track = document.getElementById('prog-track');
+  function mkMarker(cls, pct, label, valueLabel) {
+    var m = document.createElement('div');
+    m.className = 'marker ' + cls;
+    m.style.left = pct + '%';
+    m.innerHTML =
+      '<span class="marker-value">' + valueLabel + '</span>' +
+      '<div class="marker-dot"></div>' +
+      '<span class="marker-label">' + label + '</span>';
+    track.appendChild(m);
+  }
+  mkMarker('avg',   avg,   'Média geral', '');
+  mkMarker('you',   score, 'Você agora',  '');
+  mkMarker('after', after, 'Após o desafio', '🎯');
+
+  // Anima barras
+  setTimeout(function() {
+    document.getElementById('pfill-avg').style.width   = avg   + '%';
+    document.getElementById('pfill-you').style.width   = score + '%';
+    var af = document.getElementById('pfill-after');
+    af.style.width   = after + '%';
+    af.style.opacity = '1';
+  }, 400);
+}
+
+function calcYouScore(ans) {
+  var s = 20; // base
+
+  // Q0 – situação: A=evita selfies (baixo), D=gosta e quer mais (alto)
+  var q0 = [0, 8, 16, 26];
+  if (ans[0] >= 0) s += q0[ans[0]];
+
+  // Q2 – problema principal: todas as opções indicam baixo (é o ponto fraco)
+  // apenas registra — não soma pois já é dificuldade
+  // mas quem tem clareza do problema (qualquer resposta) já tem algum nível
+  if (ans[2] >= 0) s += 4;
+
+  // Q6 – comparação com outros: D="fico com vontade de aprender" = mais alto
+  var q6 = [2, 4, 4, 8];
+  if (ans[6] >= 0) s += q6[ans[6]];
+
+  // Q9 – se existisse um método: todos os "sim" indicam prontidão, D=maior
+  var q9 = [6, 7, 8, 10];
+  if (ans[9] >= 0) s += q9[ans[9]];
+
+  // Q10 – desejo: A=pouco, D=muito
+  var q10 = [2, 5, 8, 12];
+  if (ans[10] >= 0) s += q10[ans[10]];
+
+  // Q11 – comprometimento: todos positivos, D=mais urgente
+  var q11 = [6, 7, 8, 10];
+  if (ans[11] >= 0) s += q11[ans[11]];
+
+  return Math.max(10, Math.min(58, Math.round(s)));
+}
+
+/* BUILD SCREENS – renderiza cada pergunta sob demanda para evitar cache de estado no Safari/iOS */
+function renderQuestion(qi) {
+  const mount = document.getElementById('q-mount');
+  mount.innerHTML = '';
+  const q = QUESTIONS[qi];
+  const pct = Math.round((qi + 1) / TOTAL * 100);
+  const el = document.createElement('div');
+  el.className = 'screen q-screen active';
+  el.id = 'q-current';
+  const groupName = 'q' + qi + '_' + Date.now();
+  el.innerHTML =
+    '<div class="q-top">' +
+      '<div class="q-pip"></div>' +
+      '<p class="q-text">' + q.text + '</p>' +
+    '</div>' +
+    '<div class="answers" id="answers-wrap">' +
+      q.answers.map(function(a, ai) {
+        const id = groupName + '_' + ai;
+        return '<label class="ans-card" for="' + id + '">' +
+          '<input type="radio" name="' + groupName + '" id="' + id + '" value="' + ai + '" autocomplete="off" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;">' +
+          '<div class="ans-letter">' + LETTERS[ai] + '</div>' +
+          '<p class="ans-text">' + a + '</p>' +
+        '</label>';
+      }).join('') +
+    '</div>' +
+    '<div class="q-prog-wrap">' +
+      '<div class="q-prog-track">' +
+        '<div class="q-prog-fill" style="width:' + pct + '%"></div>' +
+      '</div>' +
+    '</div>';
+  mount.appendChild(el);
+
+  // Adiciona listeners nos labels após inserção no DOM
+  el.querySelectorAll('.ans-card').forEach(function(label, ai) {
+    label.addEventListener('click', function(e) {
+      pick(qi, ai, label);
+    }, { once: true });
+  });
+}
+
+/* ─── ACCORDION DOS DIAS ─── */
+function toggleDay(card) {
+  const isOpen = card.classList.contains('open');
+  // Fecha todos
+  document.querySelectorAll('.day-card.open').forEach(c => c.classList.remove('open'));
+  // Abre o clicado, se estava fechado
+  if (!isOpen) card.classList.add('open');
+}
+
+/* ─── ANALYTICS HELPER ─── */
+function gEvent(name, params) {
+  if (typeof gtag === 'function') gtag('event', name, params || {});
+}
+
+/* ─── MARCOS DE PROGRESSO DO QUIZ ─── */
+const MILESTONES = new Set();
+function checkMilestone(qi) {
+  const pct = Math.round((qi + 1) / TOTAL * 100);
+  [25, 50, 75, 100].forEach(m => {
+    if (pct >= m && !MILESTONES.has(m)) {
+      MILESTONES.add(m);
+      gEvent('quiz_progress', { percent_complete: m });
+    }
+  });
+}
+
+/* HELPERS */
+function hideAll() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+}
+function setProgress(n) {
+  document.getElementById('prog-bar').style.width = Math.round(n / TOTAL * 100) + '%';
+}
+
+/* FLOW */
+function startQuiz() {
+  hideAll();
+  document.getElementById('prog-wrap').style.display = 'block';
+  setProgress(0);
+  renderQuestion(0);
+  window.scrollTo({ top: 0 });
+  updateCurrentQuestion(0);
+  gEvent('quiz_start', { quiz_name: 'selfie_perfeita' });
+}
+
+function pick(qi, ai, el) {
+  userAnswers[qi] = ai; // ← salva resposta
+  // Marca o selecionado
+  const allCards = document.querySelectorAll('.ans-card');
+  allCards.forEach(function(c) {
+    c.classList.remove('selected');
+    c.style.pointerEvents = 'none';
+  });
+  el.classList.add('selected');
+
+  gEvent('quiz_answer', {
+    question_index: qi + 1,
+    question_total: TOTAL,
+    answer_index:   ai + 1
+  });
+  checkMilestone(qi);
+
+  // requestAnimationFrame garante que o browser pintou o estado selecionado
+  // antes de destruir e recriar o DOM — evita flash visual no iOS/WebKit
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      setTimeout(function() {
+        if (qi < TOTAL - 1) {
+          hideAll();
+          setProgress(qi + 1);
+          renderQuestion(qi + 1);
+          updateCurrentQuestion(qi + 1);
+          window.scrollTo({ top: 0, behavior: 'instant' });
+        } else {
+          loading();
+        }
+      }, 300);
+    });
+  });
+}
+
+function loading() {
+  hideAll();
+  document.getElementById('prog-bar').style.width = '100%';
+  const s = document.getElementById('screen-loading');
+  s.classList.add('active');
+  window.scrollTo({ top: 0 });
+  const b = document.getElementById('load-bar');
+  b.style.animation = 'none'; void b.offsetWidth; b.style.animation = '';
+  gEvent('quiz_complete', { quiz_name: 'selfie_perfeita' });
+  setTimeout(showResult, 2300);
+}
+
+function showResult() {
+  hideAll();
+  document.getElementById('prog-wrap').style.display = 'none';
+  const r = document.getElementById('screen-result');
+  r.classList.add('show');
+  window.scrollTo({ top: 0 });
+  gEvent('offer_page_view', { page: 'resultado_selfie_perfeita' });
+  startCountdown();
+  initReveal();
+  buildDiagnostic(); // ← gera gráfico personalizado
+}
+
+/* COUNTDOWN */
+function startCountdown() {
+  let s = 300;
+  const el = document.getElementById('countdown');
+  gEvent('urgency_timer_start', { duration_seconds: 300 });
+  (function tick() {
+    if (s < 0) {
+      el.textContent = '00:00';
+      gEvent('urgency_timer_expired');
+      return;
+    }
+    el.textContent = String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+    s--;
+    setTimeout(tick, 1000);
+  })();
+}
+
+/* SCROLL REVEAL */
+function initReveal() {
+  const SECTION_NAMES = {
+    0: 'resultado_parabens',
+    1: 'beneficios_cta',
+    2: 'sobre_produto',
+    3: 'antes_depois',
+    4: 'oferta_preco',
+    5: 'o_que_voce_recebe',
+    6: 'desafio_10_dias',
+    7: 'modulos_bonus',
+    8: 'cta_compra',
+    9: 'garantia',
+    10: 'sobre_criador',
+    11: 'visao_final',
+    12: 'cta_final'
+  };
+  let sectionCount = 0;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('on');
+        const name = SECTION_NAMES[sectionCount] || ('secao_' + sectionCount);
+        gEvent('offer_section_view', { section: name });
+        sectionCount++;
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('#screen-result .reveal').forEach(el => io.observe(el));
+}
+
+/* QUIZ EXIT */
+let currentQuestion = -1;
+function updateCurrentQuestion(qi) { currentQuestion = qi; }
+function fireQuizExit() {
+  if (currentQuestion < 0) return;
+  const screenResult = document.getElementById('screen-result');
+  if (screenResult && screenResult.classList.contains('show')) return;
+  gEvent('quiz_exit', {
+    question_index:    currentQuestion + 1,
+    question_total:    TOTAL,
+    percent_complete:  Math.round((currentQuestion + 1) / TOTAL * 100)
+  });
+}
+document.addEventListener('mouseleave', function(e) { if (e.clientY <= 0) fireQuizExit(); });
+document.addEventListener('visibilitychange', function() { if (document.visibilityState === 'hidden') fireQuizExit(); });
+
+/* ─── BEFORE/AFTER SLIDERS ─── */
+function initSliders() {
+  document.querySelectorAll('.cmp-slider').forEach(function(slider) {
+    var before = slider.dataset.before;
+    var after  = slider.dataset.after;
+
+    // Estrutura interna
+    slider.innerHTML =
+      '<img class="img-after" src="' + after + '" alt="Depois">' +
+      '<div class="cmp-clip" id="clip_' + Math.random().toString(36).slice(2) + '">' +
+        '<img src="' + before + '" alt="Antes">' +
+      '</div>' +
+      '<div class="cmp-line"></div>' +
+      '<div class="cmp-handle">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+          '<polyline points="15 18 9 12 15 6"></polyline>' +
+          '<polyline points="9 6 15 12 9 18" transform="translate(6,0)"></polyline>' +
+        '</svg>' +
+      '</div>' +
+      '<span class="cmp-label-before">Antes</span>' +
+      '<span class="cmp-label-after">Depois</span>';
+
+    var clip   = slider.querySelector('.cmp-clip');
+    var line   = slider.querySelector('.cmp-line');
+    var handle = slider.querySelector('.cmp-handle');
+    var pos    = 50; // começa no meio
+
+    function setPos(p) {
+      pos = Math.max(0, Math.min(100, p));
+      clip.style.clipPath   = 'inset(0 ' + (100 - pos) + '% 0 0)';
+      line.style.left       = pos + '%';
+      handle.style.left     = pos + '%';
+    }
+    setPos(50);
+
+    function getX(e) {
+      var touch = e.touches ? e.touches[0] : e;
+      var rect  = slider.getBoundingClientRect();
+      return Math.round((touch.clientX - rect.left) / rect.width * 100);
+    }
+
+    var dragging = false;
+    slider.addEventListener('mousedown',  function(e) { dragging = true; setPos(getX(e)); e.preventDefault(); });
+    slider.addEventListener('touchstart', function(e) { dragging = true; setPos(getX(e)); }, { passive: true });
+    window.addEventListener('mousemove',  function(e) { if (dragging) setPos(getX(e)); });
+    window.addEventListener('touchmove',  function(e) { if (dragging) setPos(getX(e.touches[0] || e)); }, { passive: true });
+    window.addEventListener('mouseup',    function()  { dragging = false; });
+    window.addEventListener('touchend',   function()  { dragging = false; });
+  });
+}
+
+// Inicializa quando a página de resultado aparecer
+var _origShowResult = showResult;
+showResult = function() {
+  _origShowResult();
+  setTimeout(initSliders, 100);
+};
+</script>
+</body>
+</html>
